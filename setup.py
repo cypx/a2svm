@@ -20,7 +20,6 @@ setup(
         "Programming Language :: Python",
         "License :: OSI Approved",
         "Natural Language :: English",
-        "Operating System :: Debian",
         "Programming Language :: Python :: 2.6",
         "Programming Language :: Python :: 2.7",
         "Topic :: System",
