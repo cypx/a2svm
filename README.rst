@@ -1,6 +1,6 @@
-***********************************************
-a2svm  - Apache 2 Simple Virtualhost Manager 
-***********************************************
+**********************************************
+a2svm  - Apache 2 Simple Virtualhost Manager  
+**********************************************
 
 **a2svm** is a Simple CLI tool to create and delete easily virtualhosts in Apache.
 
@@ -58,10 +58,10 @@ Once mod_macro is avalaible some template could be created for use by a2svm like
 	  </VirtualHost>
 	</Macro>
 
-	#Comments begining by "a2svm_make_command" are used by a2svm to run additionnal operation before vhost is created 
+	#Comments beginning by "a2svm_make_command" are used to run additionnal operation before vhost is created 
 	#a2svm_make_command: /bin/mkdir -p /var/www/$directory/public /var/www/$directory/log
 	#a2svm_make_command: /bin/chown -R cyp:www-data /var/www/$directory
-	#Comments begining by "a2svm_remove_command" are used by a2svm to run additionnal operation after vhost is removed 
+	#Comments beginning by "a2svm_remove_command" are used to run additionnal operation after vhost is removed 
 	#a2svm_remove_command: /bin/tar czf /var/www/archive/$servername.tgz /var/www/$directory
 	#a2svm_remove_command: /bin/rm -rf /var/www/$directory
 
@@ -93,4 +93,6 @@ But on some, prerequisites are required, for example, on Debian 6
 .. code-block:: bash
 
 	$ aptitude install python-pip
+
+
 
