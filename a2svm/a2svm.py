@@ -225,7 +225,7 @@ class a2svm:
 
 	def get_macro_parameter(self, vhost, parameter):
 		macro_file = os.path.join(self.macro_path, vhost.macro)
-		expr = re.compile('(^'+parameter+') ([.\/\ \:\$\-\_a-zA-Z0-9_]+)')
+		expr = re.compile('(^'+parameter+') ([.\/\ \:\$\-\+\_a-zA-Z0-9_]+)')
 		subdict = dict(servername=vhost.servername ,directory=vhost.directory ,name=vhost.name , macro=vhost.macro)
 		parameters_list = []
 		with open(macro_file, 'r') as macro_content:
