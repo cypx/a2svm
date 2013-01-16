@@ -142,32 +142,32 @@ class a2svm:
 			if (vhost):
 				vhost_list.append(vhost)
 		print "-"*119
-		print '| {0:20}| {1:20}| {2:8}| {3:20}| {4:40}|'.format("Name", "Macro", "Enabled", "ServerName", "Directory")
+		print '| {0:20}| {1:20}| {2:8}| {3:30}| {4:30}|'.format("Name", "Macro", "Enabled", "ServerName", "Directory")
 		print "-"*119
 		for vhost in vhost_list:
-			print '| {0:20}| {1:20}| {2:8}| {3:20}| {4:40}|'.format(vhost.name[:20], vhost.macro[:20], vhost.enabled[:3], vhost.servername[:20], vhost.directory[:40])
+			print '| {0:20}| {1:20}| {2:8}| {3:30}| {4:30}|'.format(vhost.name[:20], vhost.macro[:20], vhost.enabled[:8], vhost.servername[:30], vhost.directory[:30])
 		print "-"*119
 
 	def get_vhost_parameter(self,vhost_name):
-		expr = re.compile('(^\s*use) ([.\-\_a-zA-Z0-9_]+) ([.\-\_a-zA-Z0-9_]+) ([.\/\-\_a-zA-Z0-9_]+)')
+		expr = re.compile('(^\s*use) ([.\-\_a-zA-Z0-9_]+) ([.\-\_a-zA-Z0-9_]+) ([.\/\-\_a-zA-Z0-9_]+) ([.\/\-\_a-zA-Z0-9_]+)')
 		filepath=os.path.join(self.vhost_config_path, vhost_name)
 		with open(filepath, "r") as f:
 			content = f.read()
 			match = expr.match(content)
 			if match != None:
 					vhost=a2vhost()
-					vhost.name=vhost_name
 					vhost.macro=match.group(2)
+					vhost.name=match.group(3)
 					enabled_path=os.path.join(self.vhost_enabled_path, vhost_name)
 					if os.path.isfile(enabled_path):
 						vhost.enabled="yes"
-					vhost.servername = match.group(3)
-					vhost.directory = match.group(4)
+					vhost.servername = match.group(4)
+					vhost.directory = match.group(5)
 					return vhost
 
 	def make(self, vhost):
 		vhost_file = os.path.join(self.vhost_config_path, vhost.name)
-		vhost_content = "use "+vhost.macro+" "+vhost.servername+" "+vhost.directory
+		vhost_content = "use "+vhost.macro+" "+vhost.name+" "+vhost.servername+" "+vhost.directory
 		macro_parameters = self.get_macro_parameter(vhost, "#a2svm_make_command:")
 		print "The vhost will be created"
 		print " -Name: "+vhost.name
