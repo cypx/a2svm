@@ -166,15 +166,18 @@ class a2svm:
 					vhost.directory = match.group(5)
 					return vhost
 
-	def make(self, vhost):
+	def make(self, vhost, opt_args):
 		vhost_file = os.path.join(self.vhost_config_path, vhost.name)
-		vhost_content = "use "+vhost.macro+" "+vhost.name+" "+vhost.servername+" "+vhost.directory
 		macro_parameters = self.get_macro_parameter(vhost, "#a2svm_make_command:")
+		opt_args_content = ""
 		print "The vhost will be created"
 		print " -Name: "+vhost.name
 		print " -Macro: "+vhost.macro
 		print " -ServerName: "+vhost.servername
 		print " -Directory: "+vhost.directory
+		for arg in opt_args:
+			 print "  *optional argument: \""+arg+"\""
+			 opt_args_content = opt_args_content+" \""+arg+"\""
 		print "The following command will be executed"
 		print " "+'\n '.join(str(parameter) for parameter in macro_parameters)
 		confirm=query_yes_no("Are you sure?")
@@ -182,6 +185,7 @@ class a2svm:
 			sys.exit(1)
 		for parameter in macro_parameters:
 			self.run_command(parameter," ","run:" + parameter)
+		vhost_content = "use "+vhost.macro+" "+vhost.name+" "+vhost.servername+" "+vhost.directory+opt_args_content
 		if not os.path.exists(os.path.dirname(vhost_file)):
 			os.makedirs(os.path.dirname(vhost_file))
 		with open(vhost_file, 'wb') as dest_file:
@@ -252,6 +256,8 @@ def launcher():
 	parser_mk.add_argument('mk_vhost_macro', metavar='<vhost_macro>', type=str, help='Macro used by the vhost')
 	parser_mk.add_argument('mk_vhost_servername', metavar='<vhost_servername>', type=str, help='ServerName of the vhost')
 	parser_mk.add_argument('mk_vhost_directory', metavar='<vhost_directory>', type=str, help='Directory of the vhost')
+	parser_mk.add_argument('mk_opt_args', metavar='[optionnal_macro_arg]', nargs='*', type=str, help='Optionnal macro argument')
+
 
 	parser_ls = subparsers.add_parser('ls', description='Show vhost on Apache server', help='Show vhost on Apache server')
 	parser_ls.add_argument('ls_vhost_pattern', metavar='<search_pattern>', type=str, nargs='?', default='%', help='Show only vhost name matching pattern')
@@ -273,7 +279,7 @@ def launcher():
 		vhost.macro = args.mk_vhost_macro
 		vhost.servername = args.mk_vhost_servername
 		vhost.directory = args.mk_vhost_directory
-		session.make(vhost)
+		session.make(vhost,args.mk_opt_args)
 
 	if hasattr(args,'ls_vhost_pattern'):
 		session.list()
