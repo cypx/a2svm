@@ -34,7 +34,7 @@ Once mod_macro is avalaible some template could be created for use by a2svm like
 
 .. code-block:: 
 
-	<Macro vhost_standard $servername $directory>
+	<Macro vhost_standard $name $servername $directory>
 	  <VirtualHost *:80>
 
 	    ServerName $servername
