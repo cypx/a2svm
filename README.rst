@@ -1,11 +1,10 @@
 **********************************************
-a2svm  - Apache 2 Simple Virtualhost Manager  
+A2SVM  - Apache 2 Simple Virtualhost Manager  
 **********************************************
 
 **a2svm** is a Simple CLI tool to create and delete easily virtualhosts in Apache.
 
 usage: a2svm [-h] [-v] {mk,ls,rm,en,ds} ...
-
 
 a2svm commands are:
 
@@ -32,7 +31,7 @@ a2svm need apache mod_macro which could be installed on debian 6 by the followin
 
 Once mod_macro is avalaible some template could be created for use by a2svm like this one
 
-.. code-block:: 
+.. code-block:: xml
 
 	<Macro vhost_standard $name $servername $directory>
 	  <VirtualHost *:80>
