@@ -48,13 +48,13 @@ Once mod_macro is avalaible some template could be created for use by a2svm like
 	        allow from all
 	    </Directory>
 
-	    ErrorLog /var/www/$directory/log/error.log
+	    ErrorLog ${APACHE_LOG_DIR}/error-$name.log
 
 	    # Possible values include: debug, info, notice, warn, error, crit,
 	    # alert, emerg.
 	    LogLevel warn
 
-	    CustomLog /var/www/$directory/log/access.log combined
+	    CustomLog ${APACHE_LOG_DIR}/access-$name.log combined
 	  </VirtualHost>
 	</Macro>
 
