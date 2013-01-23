@@ -57,10 +57,12 @@ Once mod_macro is avalaible some template could be created for use by a2svm like
 	  </VirtualHost>
 	</Macro>
 
-	#Comments beginning by "a2svm_make_command" are used to run external commands before vhost is created 
+	#Comments beginning by "a2svm_make_command" are used to run external commands
+	#when vhost is created 
 	#a2svm_make_command: /bin/mkdir -p /var/www/$directory/public /var/www/$directory/log
 	#a2svm_make_command: /bin/chown -R cyp:www-data /var/www/$directory
-	#Comments beginning by "a2svm_remove_command" are used to run external commands after vhost is removed 
+	#Comments beginning by "a2svm_remove_command" are used to run external commands
+	#when vhost is removed 
 	#a2svm_remove_command: /bin/tar czf /var/www/archive/$servername.tgz /var/www/$directory
 	#a2svm_remove_command: /bin/rm -rf /var/www/$directory
 
