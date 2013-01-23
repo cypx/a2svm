@@ -144,6 +144,7 @@ class a2svm:
 		print "-"*119
 		print '| {0:20}| {1:20}| {2:8}| {3:30}| {4:30}|'.format("Name", "Macro", "Enabled", "ServerName", "Directory")
 		print "-"*119
+		vhost_list.sort(key=lambda x: x.name)
 		for vhost in vhost_list:
 			print '| {0:20}| {1:20}| {2:8}| {3:30}| {4:30}|'.format(vhost.name[:20], vhost.macro[:20], vhost.enabled[:8], vhost.servername[:30], vhost.directory[:30])
 		print "-"*119
