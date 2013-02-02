@@ -14,11 +14,12 @@ from argparse import ArgumentParser
 from string import Template
 
 class a2vhost:
-	name = ""
-	macro = ""
-	enabled = "no"
-	servername = ""
-	directory = ""
+	def __init__(self):
+		self.name = ""
+		self.macro = ""
+		self.enabled = "no"
+		self.servername = ""
+		self.directory = ""
 
 
 def query_yes_no(question, default="yes"):
@@ -45,21 +46,20 @@ def query_yes_no(question, default="yes"):
 
 
 class a2svm:
-	name = "default"
-	macro_path = "/etc/apache2/conf.d/"
-	macro_file_filter = "macro_vhost*"
-	vhost_config_path = "/etc/apache2/sites-available"
-	vhost_enabled_path = "/etc/apache2/sites-enabled"
-	vhost_enabling_command = "/usr/sbin/a2ensite"
-	vhost_disabling_command = "/usr/sbin/a2dissite"
-	apache_reload_command = "/etc/init.d/apache2 reload"
-	config = ConfigParser.ConfigParser()
-	configfile = ""
+	appname = "a2svm"
+	appauthor = ressources.__author__
 
 	def __init__(self):
-		appname = "a2svm"
-		appauthor = ressources.__author__
-		self.config_file= os.path.join(user_data_dir(appname, appauthor), 'a2svm.cfg')
+		self.name = "default"
+		self.macro_path = "/etc/apache2/conf.d/"
+		self.macro_file_filter = "macro_vhost*"
+		self.vhost_config_path = "/etc/apache2/sites-available"
+		self.vhost_enabled_path = "/etc/apache2/sites-enabled"
+		self.vhost_enabling_command = "/usr/sbin/a2ensite"
+		self.vhost_disabling_command = "/usr/sbin/a2dissite"
+		self.apache_reload_command = "/etc/init.d/apache2 reload"
+		self.config = ConfigParser.ConfigParser()
+		self.config_file= os.path.join(user_data_dir(self.appname, self.appauthor), 'a2svm.cfg')
 		self.config.read(self.config_file)
 
 	def config_remove(self, config_id):
