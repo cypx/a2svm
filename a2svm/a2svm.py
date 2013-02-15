@@ -13,7 +13,7 @@ from appdirs import *
 from argparse import ArgumentParser 
 from string import Template
 
-class a2vhost:
+class a2vhost(object):
 	def __init__(self):
 		self.name = ""
 		self.macro = ""
@@ -45,7 +45,7 @@ def query_yes_no(question, default="yes"):
 				"(or 'y' or 'n').\n")
 
 
-class a2svm:
+class a2svm(object):
 	appname = "a2svm"
 	appauthor = ressources.__author__
 
