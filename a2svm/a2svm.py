@@ -183,6 +183,19 @@ class a2svm(object):
 		confirm=query_yes_no("Are you sure?")
 		if not (confirm):
 			sys.exit(1)
+		# check vhosts if name or servername already exist
+		filelist=os.listdir(self.vhost_config_path)
+		vhost_list = []
+		for file in filelist:
+			existing_vhost=self.get_vhost_parameter(file)
+			if (vhost):
+				if existing_vhost.name == vhost.name:
+					print "Error name already exist"
+					sys.exit(1)
+				if existing_vhost.servername == vhost.servername:
+					print "Error servername already exist"
+					sys.exit(1)
+		# create vhost file
 		for parameter in macro_parameters:
 			self.run_command(parameter," ","run:" + parameter)
 		vhost_content = "use "+vhost.macro+" "+vhost.name+" "+vhost.servername+" "+vhost.directory+opt_args_content
