@@ -167,6 +167,11 @@ class a2svm(object):
 					return vhost
 
 	def make(self, vhost, opt_args):
+		# check if macro file exist
+		if os.path.isfile(os.path.join(self.macro_path, vhost.macro)): pass
+		else:
+			print "Error, macro file not found, are you sure "+os.path.join(self.macro_path, vhost.macro)+" exist?"
+   			sys.exit(1)
 		vhost_file = os.path.join(self.vhost_config_path, vhost.name)
 		macro_parameters = self.get_macro_parameter(vhost, "#a2svm_make_command:")
 		opt_args_content = ""
@@ -183,6 +188,11 @@ class a2svm(object):
 		confirm=query_yes_no("Are you sure?")
 		if not (confirm):
 			sys.exit(1)
+		# check number of argument required by macro
+		macro_arg_number=self.count_macro_parameter(vhost.macro)
+		if (len(opt_args) + 4) != macro_arg_number:
+			print "Error, this macro require "+str(macro_arg_number)+" arguments but "+str(len(opt_args) + 4)+" founds"
+			sys.exit(1)
 		# check vhosts if name or servername already exist
 		filelist=os.listdir(self.vhost_config_path)
 		vhost_list = []
@@ -195,7 +205,7 @@ class a2svm(object):
 				if existing_vhost.servername == vhost.servername:
 					print "Error servername already exist"
 					sys.exit(1)
-		# create vhost file
+		# create vhost
 		for parameter in macro_parameters:
 			self.run_command(parameter," ","run:" + parameter)
 		vhost_content = "use "+vhost.macro+" "+vhost.name+" "+vhost.servername+" "+vhost.directory+opt_args_content
@@ -253,6 +263,20 @@ class a2svm(object):
 					result = Template(match.group(2)).substitute(subdict)
 					parameters_list.append(result)
 		return parameters_list
+
+	def count_macro_parameter(self, macro):
+		macro_file = os.path.join(self.macro_path, macro)
+		expr = re.compile('(^<Macro '+macro+') ([.\/\ \:\$\-\+\_a-zA-Z0-9_]+)')
+		with open(macro_file, 'r') as macro_content:
+			for line in macro_content:
+				match = expr.match(line)
+				if match != None:
+					line=line.lower()
+					line=line.replace("<macro","")
+					line=line.replace(">","")
+					count = re.findall(" ", line)
+					return len(count)-1
+		return 0
 
 def launcher():
 	parser = ArgumentParser(description=ressources.__description__,prog="a2svm")
