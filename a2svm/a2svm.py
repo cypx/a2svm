@@ -175,9 +175,8 @@ class a2svm(object):
 		vhost_file = os.path.join(self.vhost_config_path, vhost.name)
 		macro_parameters = self.get_macro_parameter(vhost, "#a2svm_make_command:")
 		opt_args_content = ""
-		print "The vhost will be created"
+		print "The vhost will be created using the macro named '"+vhost.macro+"' with the following arguments:"
 		print " -Name: "+vhost.name
-		print " -Macro: "+vhost.macro
 		print " -ServerName: "+vhost.servername
 		print " -Directory: "+vhost.directory
 		for arg in opt_args:
@@ -190,20 +189,19 @@ class a2svm(object):
 			sys.exit(1)
 		# check number of argument required by macro
 		macro_arg_number=self.count_macro_parameter(vhost.macro)
-		if (len(opt_args) + 4) != macro_arg_number:
-			print "Error, this macro require "+str(macro_arg_number)+" arguments but "+str(len(opt_args) + 4)+" founds"
+		if (len(opt_args) + 3) != (macro_arg_number):
+			print "Error, this macro require "+str(macro_arg_number)+" arguments but "+str(len(opt_args) + 3)+" founds"
 			sys.exit(1)
 		# check vhosts if name or servername already exist
 		filelist=os.listdir(self.vhost_config_path)
-		vhost_list = []
 		for file in filelist:
 			existing_vhost=self.get_vhost_parameter(file)
-			if (vhost):
+			if (existing_vhost):
 				if existing_vhost.name == vhost.name:
-					print "Error name already exist"
+					print "Error, name already exist"
 					sys.exit(1)
 				if existing_vhost.servername == vhost.servername:
-					print "Error servername already exist"
+					print "Error, servername already exist"
 					sys.exit(1)
 		# create vhost
 		for parameter in macro_parameters:
