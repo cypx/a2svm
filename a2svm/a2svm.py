@@ -279,7 +279,7 @@ class a2svm(object):
 		return 0
 
 def launcher():
-	parser = ArgumentParser(description=ressources.__description__,prog="a2svm")
+	parser = ArgumentParser(description=ressources.__description__,prog=ressources.__app_name__)
 
 	parser.add_argument("-v", "--version",  action="version",   version="%(prog)s : "+ressources.__version__ ,help="Show program version.")
 

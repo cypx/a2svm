@@ -6,11 +6,11 @@ from setuptools import setup, find_packages
 execfile('a2svm/ressources.py')
  
 setup(
-    name='a2svm',
+    name=__app_name__,
     version=__version__,
     packages=find_packages(),
     author=__author__,
-    author_email="cyp@bidouille.info",
+    author_email=__author_email__,
     description=__description__,
     long_description=open('README.rst').read(),
     include_package_data=True,
