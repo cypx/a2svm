@@ -96,4 +96,20 @@ But on some, prerequisites are required, for example, on Debian 6
 	$ aptitude install python-pip
 
 
+Upgrade
+##########
+
+Using pip
+**************
+
+.. code-block:: bash
+
+	$ pip --upgrade a2svm
+
+Using easy_install
+*********************
+
+.. code-block:: bash
+
+	$ easy_install --upgrade a2svm
 
