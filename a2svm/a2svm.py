@@ -317,20 +317,25 @@ def launcher():
 		vhost.servername = args.mk_vhost_servername
 		vhost.directory = args.mk_vhost_directory
 		session.make(vhost,args.mk_opt_args)
+		sys.exit(1)
 
 	if hasattr(args,'ls_vhost_pattern'):
 		session.list()
+		sys.exit(1)
 
 	if hasattr(args,'rm_vhost_name'): 
 		session.remove(args.rm_vhost_name)
+		sys.exit(1)
 
 	if hasattr(args,'en_vhost_name'): 
 		session.run_command(session.vhost_enabling_command, args.en_vhost_name, "Vhost enabled")
 		session.run_command(session.apache_reload_command, " ", "Apache reloaded")
+		sys.exit(1)
 
 	if hasattr(args,'ds_vhost_name'): 
 		session.run_command(session.vhost_disabling_command, args.ds_vhost_name, "Vhost disabled")
 		session.run_command(session.apache_reload_command, " ", "Apache reloaded")		
+		sys.exit(1)
 
 
 if __name__ == "__main__":
