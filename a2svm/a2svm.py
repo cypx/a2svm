@@ -216,7 +216,7 @@ class a2svm(object):
 
 	def remove(self, vhost_name):
 		vhost_file = os.path.join(self.vhost_config_path, vhost_name + ".conf")
-		vhost=self.get_vhost_parameter(vhost_name)
+		vhost=self.get_vhost_parameter(vhost_name + ".conf")
 		macro_parameters = self.get_macro_parameter(vhost, "#a2svm_remove_command:")
 		print "The vhost will be deleted"
 		print " -Name: "+vhost.name
