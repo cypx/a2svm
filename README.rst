@@ -1,5 +1,5 @@
 **********************************************
-A2SVM  - Apache 2 Simple Virtualhost Manager  
+A2SVM  - Apache 2 Simple Virtualhost Manager
 **********************************************
 
 **a2svm** is a Simple CLI tool to create and delete easily virtualhosts in Apache.
@@ -16,10 +16,10 @@ a2svm commands are:
 
 See 'a2svm <command> -h' for more information on a specific command.
 
-PyPI package `<http://pypi.python.org/pypi/a2svm>`__ 
+PyPI package `<http://pypi.python.org/pypi/a2svm>`__
 
-Sources `<https://github.com/cypx/a2svm>`__ 
- 
+Sources `<https://github.com/cypx/a2svm>`__
+
 Requirements
 ##############
 
@@ -58,15 +58,15 @@ Once mod_macro is avalaible some template could be created for use by a2svm like
 	</Macro>
 
 	#Comments beginning by "a2svm_make_command" are used to run external commands
-	#when vhost is created 
+	#when vhost is created
 	#a2svm_make_command: /bin/mkdir -p /var/www/$directory/public /var/www/$directory/log
 	#a2svm_make_command: /bin/chown -R cyp:www-data /var/www/$directory
 	#Comments beginning by "a2svm_remove_command" are used to run external commands
-	#when vhost is removed 
+	#when vhost is removed
 	#a2svm_remove_command: /bin/tar czf /var/www/archive/$servername.tgz /var/www/$directory
 	#a2svm_remove_command: /bin/rm -rf /var/www/$directory
 
-	
+
 
 Installation
 ##############
@@ -83,7 +83,7 @@ Using pip
 Using easy_install
 *********************
 
-On most Linux distribution 
+On most Linux distribution
 
 .. code-block:: bash
 
@@ -113,3 +113,11 @@ Using easy_install
 
 	$ easy_install --upgrade a2svm
 
+From sources
+***************
+
+.. code-block:: bash
+
+    $ git clone https://github.com/cypx/a2svm
+    $ cd a2svm
+    $ python setup.py install

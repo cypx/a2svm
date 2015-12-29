@@ -10,7 +10,7 @@ import datetime
 import subprocess
 import re
 from appdirs import *
-from argparse import ArgumentParser 
+from argparse import ArgumentParser
 from string import Template
 
 class a2vhost(object):
@@ -101,7 +101,7 @@ class a2svm(object):
 				self.config.add_section(config_id)
 				self.config.set(config_id, 'name', self.name)
 				if input_macro_path:
-					self.config.set(config_id, 'macro_path', input_macro_path) 
+					self.config.set(config_id, 'macro_path', input_macro_path)
 				else:
 					self.config.set(config_id, 'macro_path', self.macro_path)
 				if input_macro_file_filter:
@@ -149,9 +149,9 @@ class a2svm(object):
 			print '| {0:20}| {1:20}| {2:8}| {3:30}| {4:30}|'.format(vhost.name[:20], vhost.macro[:20], vhost.enabled[:8], vhost.servername[:30], vhost.directory[:30])
 		print "-"*119
 
-	def get_vhost_parameter(self,vhost_name):
+	def get_vhost_parameter(self,file_name):
 		expr = re.compile('(^\s*use) ([.\-\_a-zA-Z0-9_]+) ([.\-\_a-zA-Z0-9_]+) ([.\/\-\_a-zA-Z0-9_]+) ([.\/\-\_a-zA-Z0-9_]+)')
-		filepath=os.path.join(self.vhost_config_path, vhost_name)
+		filepath=os.path.join(self.vhost_config_path, file_name)
 		with open(filepath, "r") as f:
 			content = f.read()
 			match = expr.match(content)
@@ -159,7 +159,7 @@ class a2svm(object):
 					vhost=a2vhost()
 					vhost.macro=match.group(2)
 					vhost.name=match.group(3)
-					enabled_path=os.path.join(self.vhost_enabled_path, vhost_name)
+					enabled_path=os.path.join(self.vhost_enabled_path, file_name)
 					if os.path.isfile(enabled_path):
 						vhost.enabled="yes"
 					vhost.servername = match.group(4)
@@ -168,11 +168,11 @@ class a2svm(object):
 
 	def make(self, vhost, opt_args):
 		# check if macro file exist
-		if os.path.isfile(os.path.join(self.macro_path, vhost.macro)): pass
+		if os.path.isfile(os.path.join(self.macro_path, vhost.macro + ".conf")): pass
 		else:
-			print "Error, macro file not found, are you sure "+os.path.join(self.macro_path, vhost.macro)+" exist?"
+			print "Error, macro file not found, are you sure "+os.path.join(self.macro_path, vhost.macro + ".conf")+" exist?"
    			sys.exit(1)
-		vhost_file = os.path.join(self.vhost_config_path, vhost.name)
+		vhost_file = os.path.join(self.vhost_config_path, vhost.name + ".conf")
 		macro_parameters = self.get_macro_parameter(vhost, "#a2svm_make_command:")
 		opt_args_content = ""
 		print "The vhost will be created using the macro named '"+vhost.macro+"' with the following arguments:"
@@ -215,7 +215,7 @@ class a2svm(object):
 		self.run_command(self.apache_reload_command, " ", "Apache reloaded")
 
 	def remove(self, vhost_name):
-		vhost_file = os.path.join(self.vhost_config_path, vhost_name)
+		vhost_file = os.path.join(self.vhost_config_path, vhost_name + ".conf")
 		vhost=self.get_vhost_parameter(vhost_name)
 		macro_parameters = self.get_macro_parameter(vhost, "#a2svm_remove_command:")
 		print "The vhost will be deleted"
@@ -250,7 +250,7 @@ class a2svm(object):
 			sys.exit(1)
 
 	def get_macro_parameter(self, vhost, parameter):
-		macro_file = os.path.join(self.macro_path, vhost.macro)
+		macro_file = os.path.join(self.macro_path, vhost.macro + ".conf")
 		expr = re.compile('(^'+parameter+') ([.\/\ \:\$\-\+\_a-zA-Z0-9_]+)')
 		subdict = dict(servername=vhost.servername ,directory=vhost.directory ,name=vhost.name , macro=vhost.macro)
 		parameters_list = []
@@ -263,7 +263,7 @@ class a2svm(object):
 		return parameters_list
 
 	def count_macro_parameter(self, macro):
-		macro_file = os.path.join(self.macro_path, macro)
+		macro_file = os.path.join(self.macro_path, macro + ".conf")
 		expr = re.compile('(^<Macro '+macro+') ([.\/\ \:\$\-\+\_a-zA-Z0-9_]+)')
 		with open(macro_file, 'r') as macro_content:
 			for line in macro_content:
@@ -306,9 +306,9 @@ def launcher():
 	parser_ds = subparsers.add_parser('ds',description='Disable a vhost', help='Disable a vhost')
 	parser_ds.add_argument('ds_vhost_name', type=str, help='Name of the disabled vhost')
 
-	args = parser.parse_args() 
+	args = parser.parse_args()
 
-	if hasattr(args,'mk_vhost_name'): 
+	if hasattr(args,'mk_vhost_name'):
 		vhost = a2vhost()
 		vhost.name = args.mk_vhost_name
 		vhost.macro = args.mk_vhost_macro
@@ -321,18 +321,18 @@ def launcher():
 		session.list()
 		sys.exit(1)
 
-	if hasattr(args,'rm_vhost_name'): 
+	if hasattr(args,'rm_vhost_name'):
 		session.remove(args.rm_vhost_name)
 		sys.exit(1)
 
-	if hasattr(args,'en_vhost_name'): 
+	if hasattr(args,'en_vhost_name'):
 		session.run_command(session.vhost_enabling_command, args.en_vhost_name, "Vhost enabled")
 		session.run_command(session.apache_reload_command, " ", "Apache reloaded")
 		sys.exit(1)
 
-	if hasattr(args,'ds_vhost_name'): 
+	if hasattr(args,'ds_vhost_name'):
 		session.run_command(session.vhost_disabling_command, args.ds_vhost_name, "Vhost disabled")
-		session.run_command(session.apache_reload_command, " ", "Apache reloaded")		
+		session.run_command(session.apache_reload_command, " ", "Apache reloaded")
 		sys.exit(1)
 
 
