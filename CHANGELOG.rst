@@ -1,10 +1,15 @@
 **************
-a2svm 
+a2svm
 **************
 
 
-Changelog 
-############# 
+Changelog
+#############
+
+0.0.5 (20161106)
+*******************
+
+* add compatibility with Debian 8 default apache conf structure
 
 0.0.4 (20130218)
 *******************

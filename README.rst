@@ -121,3 +121,15 @@ From sources
     $ git clone https://github.com/cypx/a2svm
     $ cd a2svm
     $ python setup.py install
+
+Reminder
+***************
+
+To publish package on pypi
+
+.. code-block:: bash
+
+    $ pip install twine
+		$ rm -rf dist
+		$ python setup.py sdist bdist_wheel
+    $ twine upload dist/*
