@@ -51,7 +51,7 @@ class a2svm(object):
 
 	def __init__(self):
 		self.name = "default"
-		self.macro_path = "/etc/apache2/conf.d/"
+		self.macro_path = "/etc/apache2/conf-enabled/"
 		self.macro_file_filter = "macro_vhost*"
 		self.vhost_config_path = "/etc/apache2/sites-available"
 		self.vhost_enabled_path = "/etc/apache2/sites-enabled"
