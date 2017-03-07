@@ -6,6 +6,11 @@ a2svm
 Changelog
 #############
 
+0.0.7 (20170307)
+*******************
+
+* add command to launch certificate generation using certbot
+
 0.0.5 (20161106)
 *******************
 

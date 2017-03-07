@@ -20,6 +20,7 @@ class a2vhost(object):
 		self.enabled = "no"
 		self.servername = ""
 		self.directory = ""
+		self.alias = ""
 
 
 def query_yes_no(question, default="yes"):
@@ -58,6 +59,8 @@ class a2svm(object):
 		self.vhost_enabling_command = "/usr/sbin/a2ensite"
 		self.vhost_disabling_command = "/usr/sbin/a2dissite"
 		self.apache_reload_command = "/etc/init.d/apache2 reload"
+		self.certbot_path = "/usr/bin/certbot"
+		self.certbot_mail = "root@host.local"
 		self.config = ConfigParser.ConfigParser()
 		self.config_file= os.path.join(user_data_dir(self.appname, self.appauthor), 'a2svm.cfg')
 		self.config.read(self.config_file)
@@ -81,6 +84,8 @@ class a2svm(object):
 				self.vhost_enabling_command=self.config.get(config_id, 'vhost_enabling_command', 0)
 				self.vhost_disabling_command=self.config.get(config_id, 'vhost_disabling_command', 0)
 				self.apache_reload_command=self.config.get(config_id, 'apache_reload_command', 0)
+				self.certbot_path=self.config.get(config_id, 'certbot_path', 0)
+				self.certbot_mail=self.config.get(config_id, 'certbot_mail', 0)
 			except ConfigParser.NoOptionError:
 				print 'Invalid or outdated config'
 				remove_config=query_yes_no("Do you want to remove invalid config")
@@ -96,6 +101,8 @@ class a2svm(object):
 			input_vhost_enabling_command = raw_input("Vhosts enabling command ("+self.vhost_enabling_command+")> ")
 			input_vhost_disabling_command = raw_input("Vhosts disabling command ("+self.vhost_disabling_command+")> ")
 			input_apache_reload_command = raw_input("Apache reload command ("+self.apache_reload_command+")> ")
+			input_certbot_path = raw_input("Certbot path ("+self.certbot_path+")> ")
+			input_certbot_mail = raw_input("Certbot mail ("+self.certbot_mail+")> ")
 			save_config=query_yes_no("Do you want to save configuration?")
 			if (save_config):
 				self.config.add_section(config_id)
@@ -128,6 +135,10 @@ class a2svm(object):
 					self.config.set(config_id, 'apache_reload_command', input_apache_reload_command)
 				else:
 					self.config.set(config_id, 'apache_reload_command', self.apache_reload_command)
+				if input_certbot_path:
+					self.config.set(config_id, 'certbot_path', input_certbot_path)
+				else:
+					self.config.set(config_id, 'apache_certbot_path', self.certbot_path)
 				if not os.path.exists(os.path.dirname(self.config_file)):
 					os.makedirs(os.path.dirname(self.config_file))
 				with open(self.config_file, 'wb') as configfile:
@@ -144,13 +155,18 @@ class a2svm(object):
 		print "-"*119
 		print '| {0:20}| {1:20}| {2:8}| {3:30}| {4:30}|'.format("Name", "Macro", "Enabled", "ServerName", "Directory")
 		print "-"*119
+		#print "-"*171
+		#print '| {0:20}| {1:20}| {2:8}| {3:30}| {4:30}| {5:50}|'.format("Name", "Macro", "Enabled", "ServerName", "Directory", "Alias")
+		#print "-"*171
 		vhost_list.sort(key=lambda x: x.name)
 		for vhost in vhost_list:
-			print '| {0:20}| {1:20}| {2:8}| {3:30}| {4:30}|'.format(vhost.name[:20], vhost.macro[:20], vhost.enabled[:8], vhost.servername[:30], vhost.directory[:30])
+				print '| {0:20}| {1:20}| {2:8}| {3:30}| {4:30}|'.format(vhost.name[:20], vhost.macro[:20], vhost.enabled[:8], vhost.servername[:30], vhost.directory[:30])
 		print "-"*119
+		#	print '| {0:20}| {1:20}| {2:8}| {3:30}| {4:30}| {5:50}|'.format(vhost.name[:20], vhost.macro[:20], vhost.enabled[:8], vhost.servername[:30], vhost.directory[:30], vhost.alias[:50])
+		#print "-"*171
 
 	def get_vhost_parameter(self,file_name):
-		expr = re.compile('(^\s*use) ([.\-\_a-zA-Z0-9_]+) ([.\-\_a-zA-Z0-9_]+) ([.\/\-\_a-zA-Z0-9_]+) ([.\/\-\_a-zA-Z0-9_]+)')
+		expr = re.compile('(^\s*use) ([.\-\_a-zA-Z0-9_]+) ([.\-\_a-zA-Z0-9_]+) ([.\/\-\_a-zA-Z0-9_]+) ([.\/\-\_a-zA-Z0-9_]+) ([.\/\-\_\ "a-zA-Z0-9_]+)')
 		filepath=os.path.join(self.vhost_config_path, file_name)
 		with open(filepath, "r") as f:
 			content = f.read()
@@ -164,6 +180,7 @@ class a2svm(object):
 						vhost.enabled="yes"
 					vhost.servername = match.group(4)
 					vhost.directory = match.group(5)
+					vhost.alias = match.group(6)
 					return vhost
 
 	def make(self, vhost, opt_args):
@@ -276,6 +293,10 @@ class a2svm(object):
 					return len(count)-1
 		return 0
 
+	def gen_cert(self, vhost_name):
+		vhost = self.get_vhost_parameter(vhost_name + ".conf")
+		self.run_command(self.certbot_path, "certonly --noninteractive --agree-tos --email " + self.certbot_mail + " --webroot --expand -w /var/www/vhosts/" + vhost.directory + "/html/ -d " + vhost.servername , "Certificate update requested")
+
 def launcher():
 	parser = ArgumentParser(description=ressources.__description__,prog=ressources.__app_name__)
 
@@ -306,6 +327,10 @@ def launcher():
 	parser_ds = subparsers.add_parser('ds',description='Disable a vhost', help='Disable a vhost')
 	parser_ds.add_argument('ds_vhost_name', type=str, help='Name of the disabled vhost')
 
+	parser_tls = subparsers.add_parser('tls',description='Request Let\'s Encrypt certificate for a vhost', help='Request certificate for a vhost')
+	parser_tls.add_argument('-a', '--all', action='store_true', dest='tls_all', help='Request certificate for all enabled vhosts')
+	parser_tls.add_argument('tls_vhost_name', metavar='<vhost_name>', nargs='?', default='', help='Name of the vhost')
+
 	args = parser.parse_args()
 
 	if hasattr(args,'mk_vhost_name'):
@@ -334,6 +359,28 @@ def launcher():
 		session.run_command(session.vhost_disabling_command, args.ds_vhost_name, "Vhost disabled")
 		session.run_command(session.apache_reload_command, " ", "Apache reloaded")
 		sys.exit(1)
+
+	if hasattr(args,'tls_all'):
+		if args.tls_all:
+			filelist=os.listdir(session.vhost_config_path)
+			vhost_list = []
+			for file in filelist:
+				vhost=session.get_vhost_parameter(file)
+				if (vhost):
+					vhost_list.append(vhost)
+			for vhost in vhost_list:
+				if vhost.enabled == "yes":
+					session.gen_cert(vhost.name)
+			sys.exit(1)
+
+	if hasattr(args,'tls_vhost_name'):
+		if not args.tls_all and args.tls_vhost_name != '':
+			session.gen_cert(args.tls_vhost_name)
+			sys.exit(1)
+		else:
+			parser_tls.print_help()
+			sys.exit(1)
+
 
 
 if __name__ == "__main__":
