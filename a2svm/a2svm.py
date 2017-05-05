@@ -295,7 +295,10 @@ class a2svm(object):
 
 	def gen_cert(self, vhost_name):
 		vhost = self.get_vhost_parameter(vhost_name + ".conf")
-		self.run_command(self.certbot_path, "certonly --noninteractive --agree-tos --email " + self.certbot_mail + " --webroot --expand -w /var/www/vhosts/" + vhost.directory + "/html/ -d " + vhost.servername , "Certificate update requested")
+		extra_alias = ""
+		for fqdn in vhost.alias.split(' '):
+			extra_alias += " -d " + fqdn
+		self.run_command(self.certbot_path, "certonly --noninteractive --agree-tos --email " + self.certbot_mail + " --webroot --expand -w /var/www/vhosts/" + vhost.directory + "/html/ -d " + vhost.servername + extra_alias , "Certificate update requested")
 
 def launcher():
 	parser = ArgumentParser(description=ressources.__description__,prog=ressources.__app_name__)
