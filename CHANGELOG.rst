@@ -6,7 +6,12 @@ a2svm
 Changelog
 #############
 
-0.0.7 (20170307)
+0.0.7 (20170606)
+*******************
+
+* include serveralias into letsencrypt certificate
+
+0.0.6 (20170307)
 *******************
 
 * add command to launch certificate generation using certbot
