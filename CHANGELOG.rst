@@ -6,6 +6,11 @@ a2svm
 Changelog
 #############
 
+0.0.8 (20170608)
+*******************
+
+* bugfix on letsencrypt certificate generation with more than one alias
+
 0.0.7 (20170606)
 *******************
 
