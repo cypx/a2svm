@@ -3,8 +3,8 @@
  
 from setuptools import setup, find_packages
  
-execfile('a2svm/ressources.py')
- 
+exec(open("a2svm/ressources.py").read())
+
 setup(
     name=__app_name__,
     version=__version__,
@@ -22,9 +22,12 @@ setup(
         "Natural Language :: English",
         "Programming Language :: Python :: 2.6",
         "Programming Language :: Python :: 2.7",
+        "Programming Language :: Python :: 3.4",
+        "Programming Language :: Python :: 3.5",
+        "Programming Language :: Python :: 3.6",
         "Topic :: System",
         "Topic :: Utilities",
-        "Development Status :: 3 - Alpha",
+        "Development Status :: 4 - Beta",
     ],
     entry_points = {
         'console_scripts': [

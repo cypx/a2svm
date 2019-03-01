@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+from __future__ import print_function
 import ressources
 import sys
 import ConfigParser
@@ -71,7 +72,7 @@ class a2svm(object):
 				self.config.remove_section(config_id)
 				with open(self.config_file, 'wb') as configfile:
 					self.config.write(configfile)
-					print '\nConfiguration file has been update: '+os.path.abspath(self.config_file)
+					print('\nConfiguration file has been update: '+os.path.abspath(self.config_file))
 
 
 	def load(self, config_id):
@@ -87,13 +88,13 @@ class a2svm(object):
 				self.certbot_path=self.config.get(config_id, 'certbot_path', 0)
 				self.certbot_mail=self.config.get(config_id, 'certbot_mail', 0)
 			except ConfigParser.NoOptionError:
-				print 'Invalid or outdated config'
+				print('Invalid or outdated config')
 				remove_config=query_yes_no("Do you want to remove invalid config")
 				if (remove_config):
 					self.config_remove(config_id)
 				sys.exit(1)
 		else:
-			print "Please provide informations about your Apache configuration: ".center(50, "+")
+			print("Please provide informations about your Apache configuration: ".center(50, "+"))
 			input_macro_path = raw_input("Macro folder path ("+self.macro_path+")> ")
 			input_macro_file_filter = raw_input("Macro file filter ("+self.macro_file_filter+")> ")
 			input_vhost_config_path = raw_input("Vhosts file path ("+self.vhost_config_path+")> ")
@@ -138,12 +139,16 @@ class a2svm(object):
 				if input_certbot_path:
 					self.config.set(config_id, 'certbot_path', input_certbot_path)
 				else:
-					self.config.set(config_id, 'apache_certbot_path', self.certbot_path)
+					self.config.set(config_id, 'certbot_path', self.certbot_path)
+				if input_certbot_mail:
+					self.config.set(config_id, 'certbot_mail', input_certbot_mail)
+				else:
+					self.config.set(config_id, 'certbot_mail', self.certbot_mail)
 				if not os.path.exists(os.path.dirname(self.config_file)):
 					os.makedirs(os.path.dirname(self.config_file))
 				with open(self.config_file, 'wb') as configfile:
 					self.config.write(configfile)
-					print '\nConfiguration file has been saved to: '+os.path.abspath(self.config_file)
+					print('\nConfiguration file has been saved to: '+os.path.abspath(self.config_file))
 
 	def list(self):
 		filelist=os.listdir(self.vhost_config_path)
@@ -152,18 +157,18 @@ class a2svm(object):
 			vhost=self.get_vhost_parameter(file)
 			if (vhost):
 				vhost_list.append(vhost)
-		print "-"*119
-		print '| {0:20}| {1:20}| {2:8}| {3:30}| {4:30}|'.format("Name", "Macro", "Enabled", "ServerName", "Directory")
-		print "-"*119
-		#print "-"*171
-		#print '| {0:20}| {1:20}| {2:8}| {3:30}| {4:30}| {5:50}|'.format("Name", "Macro", "Enabled", "ServerName", "Directory", "Alias")
-		#print "-"*171
+		print("-"*119)
+		print('| {0:20}| {1:20}| {2:8}| {3:30}| {4:30}|'.format("Name", "Macro", "Enabled", "ServerName", "Directory"))
+		print("-"*119)
+		# print("-"*171)
+		# print('| {0:20}| {1:20}| {2:8}| {3:30}| {4:30}| {5:50}|'.format("Name", "Macro", "Enabled", "ServerName", "Directory", "Alias"))
+		# print("-"*171)
 		vhost_list.sort(key=lambda x: x.name)
 		for vhost in vhost_list:
-				print '| {0:20}| {1:20}| {2:8}| {3:30}| {4:30}|'.format(vhost.name[:20], vhost.macro[:20], vhost.enabled[:8], vhost.servername[:30], vhost.directory[:30])
-		print "-"*119
-		#	print '| {0:20}| {1:20}| {2:8}| {3:30}| {4:30}| {5:50}|'.format(vhost.name[:20], vhost.macro[:20], vhost.enabled[:8], vhost.servername[:30], vhost.directory[:30], vhost.alias[:50])
-		#print "-"*171
+				print('| {0:20}| {1:20}| {2:8}| {3:30}| {4:30}|'.format(vhost.name[:20], vhost.macro[:20], vhost.enabled[:8], vhost.servername[:30], vhost.directory[:30]))
+		print("-"*119)
+		# print('| {0:20}| {1:20}| {2:8}| {3:30}| {4:30}| {5:50}|'.format(vhost.name[:20], vhost.macro[:20], vhost.enabled[:8], vhost.servername[:30], vhost.directory[:30], vhost.alias[:50]))
+		# print("-"*171)
 
 	def get_vhost_parameter(self,file_name):
 		expr = re.compile('(^\s*use) ([.\-\_a-zA-Z0-9_]+) ([.\-\_a-zA-Z0-9_]+) ([.\/\-\_a-zA-Z0-9_]+) ([.\/\-\_a-zA-Z0-9_]+) ([.\/\-\_\ "a-zA-Z0-9_]+)')
@@ -187,27 +192,27 @@ class a2svm(object):
 		# check if macro file exist
 		if os.path.isfile(os.path.join(self.macro_path, vhost.macro + ".conf")): pass
 		else:
-			print "Error, macro file not found, are you sure "+os.path.join(self.macro_path, vhost.macro + ".conf")+" exist?"
-   			sys.exit(1)
+			print("Error, macro file not found, are you sure "+os.path.join(self.macro_path, vhost.macro + ".conf")+" exist?")
+			sys.exit(1)
 		vhost_file = os.path.join(self.vhost_config_path, vhost.name + ".conf")
 		macro_parameters = self.get_macro_parameter(vhost, "#a2svm_make_command:")
 		opt_args_content = ""
-		print "The vhost will be created using the macro named '"+vhost.macro+"' with the following arguments:"
-		print " -Name: "+vhost.name
-		print " -ServerName: "+vhost.servername
-		print " -Directory: "+vhost.directory
+		print("The vhost will be created using the macro named '"+vhost.macro+"' with the following arguments:")
+		print(" -Name: "+vhost.name)
+		print(" -ServerName: "+vhost.servername)
+		print(" -Directory: "+vhost.directory)
 		for arg in opt_args:
-			 print "  *optional argument: \""+arg+"\""
-			 opt_args_content = opt_args_content+" \""+arg+"\""
-		print "The following command will be executed"
-		print " "+'\n '.join(str(parameter) for parameter in macro_parameters)
+			print("  *optional argument: \""+arg+"\"")
+			opt_args_content = opt_args_content+" \""+arg+"\""
+		print("The following command will be executed")
+		print(" "+'\n '.join(str(parameter) for parameter in macro_parameters))
 		confirm=query_yes_no("Are you sure?")
 		if not (confirm):
 			sys.exit(1)
 		# check number of argument required by macro
 		macro_arg_number=self.count_macro_parameter(vhost.macro)
 		if (len(opt_args) + 3) != (macro_arg_number):
-			print "Error, this macro require "+str(macro_arg_number)+" arguments but "+str(len(opt_args) + 3)+" founds"
+			print("Error, this macro require "+str(macro_arg_number)+" arguments but "+str(len(opt_args) + 3)+" founds")
 			sys.exit(1)
 		# check vhosts if name or servername already exist
 		filelist=os.listdir(self.vhost_config_path)
@@ -215,10 +220,10 @@ class a2svm(object):
 			existing_vhost=self.get_vhost_parameter(file)
 			if (existing_vhost):
 				if existing_vhost.name == vhost.name:
-					print "Error, name already exist"
+					print("Error, name already exist")
 					sys.exit(1)
 				if existing_vhost.servername == vhost.servername:
-					print "Error, servername already exist"
+					print("Error, servername already exist")
 					sys.exit(1)
 		# create vhost
 		for parameter in macro_parameters:
@@ -235,13 +240,13 @@ class a2svm(object):
 		vhost_file = os.path.join(self.vhost_config_path, vhost_name + ".conf")
 		vhost=self.get_vhost_parameter(vhost_name + ".conf")
 		macro_parameters = self.get_macro_parameter(vhost, "#a2svm_remove_command:")
-		print "The vhost will be deleted"
-		print " -Name: "+vhost.name
-		print " -Macro: "+vhost.macro
-		print " -ServerName: "+vhost.servername
-		print " -Directory: "+vhost.directory
-		print "The following command will be executed"
-		print " "+'\n '.join(str(parameter) for parameter in macro_parameters)
+		print("The vhost will be deleted")
+		print(" -Name: "+vhost.name)
+		print(" -Macro: "+vhost.macro)
+		print(" -ServerName: "+vhost.servername)
+		print(" -Directory: "+vhost.directory)
+		print("The following command will be executed")
+		print(" "+'\n '.join(str(parameter) for parameter in macro_parameters))
 		confirm=query_yes_no("Are you sure?")
 		if not (confirm):
 			sys.exit(1)
@@ -259,11 +264,11 @@ class a2svm(object):
 		try:
 			retcode = subprocess.call(command + " " + args, shell=True)
 			if retcode < 0:
-				print >>sys.stderr, "Child was terminated by signal", -retcode
+				sys.stderr.write("Child was terminated by signal " + str(-retcode))
 			else:
-				print >>sys.stderr, comment
+				sys.stderr.write(comment)
 		except OSError as e:
-			print >>sys.stderr, "Execution failed:", e
+			sys.stderr.write("Execution failed: " + str(e))
 			sys.exit(1)
 
 	def get_macro_parameter(self, vhost, parameter):
