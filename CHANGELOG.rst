@@ -6,6 +6,12 @@ a2svm
 Changelog
 #############
 
+0.1.0 (201903??)
+*******************
+
+* Python 3 support
+* Black formatting (https://github.com/ambv/black)
+
 0.0.8 (20170608)
 *******************
 
