@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-__app_name__  = "a2svm"
+__app_name__ = "a2svm"
 __author__ = "Cyprien Devillez"
 __license__ = "GPL"
 __author_email__ = "cyp@bidouille.info"

@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
- 
+
 from setuptools import setup, find_packages
- 
+
 exec(open("a2svm/ressources.py").read())
 
 setup(
@@ -12,10 +12,10 @@ setup(
     author=__author__,
     author_email=__author_email__,
     description=__description__,
-    long_description=open('README.rst').read(),
+    long_description=open("README.rst").read(),
     include_package_data=True,
-    install_requires=['appdirs','argparse'],
-    url='https://github.com/cypx/a2svm',
+    install_requires=["appdirs", "argparse"],
+    url="https://github.com/cypx/a2svm",
     classifiers=[
         "Programming Language :: Python",
         "License :: OSI Approved",
@@ -29,11 +29,6 @@ setup(
         "Topic :: Utilities",
         "Development Status :: 4 - Beta",
     ],
-    entry_points = {
-        'console_scripts': [
-            'a2svm = a2svm.a2svm:launcher',
-        ],
-    },
+    entry_points={"console_scripts": ["a2svm = a2svm.a2svm:launcher"]},
     license=__license__,
- 
-) 
+)
