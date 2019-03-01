@@ -230,9 +230,6 @@ class a2svm(object):
             )
         )
         print("-" * 119)
-        # print("-"*171)
-        # print('| {0:20}| {1:20}| {2:8}| {3:30}| {4:30}| {5:50}|'.format("Name", "Macro", "Enabled", "ServerName", "Directory", "Alias"))
-        # print("-"*171)
         vhost_list.sort(key=lambda x: x.name)
         for vhost in vhost_list:
             print(
@@ -245,8 +242,6 @@ class a2svm(object):
                 )
             )
         print("-" * 119)
-        # print('| {0:20}| {1:20}| {2:8}| {3:30}| {4:30}| {5:50}|'.format(vhost.name[:20], vhost.macro[:20], vhost.enabled[:8], vhost.servername[:30], vhost.directory[:30], vhost.alias[:50]))
-        # print("-"*171)
 
     def get_vhost_parameter(self, file_name):
         expr = re.compile(
