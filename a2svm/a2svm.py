@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from __future__ import print_function
-import ressources
+from a2svm import ressources
 import sys
 import ConfigParser
 import string
@@ -37,7 +37,7 @@ def query_yes_no(question, default="yes"):
         raise ValueError("invalid default answer: '%s'" % default)
     while 1:
         sys.stdout.write(question + prompt)
-        choice = raw_input().lower()
+        choice = input().lower()
         if default is not None and choice == "":
             return valid[default]
         elif choice in valid.keys():
@@ -114,29 +114,29 @@ class a2svm(object):
                     50, "+"
                 )
             )
-            input_macro_path = raw_input(
+            input_macro_path = input(
                 "Macro folder path (" + self.macro_path + ")> "
             )
-            input_macro_file_filter = raw_input(
+            input_macro_file_filter = input(
                 "Macro file filter (" + self.macro_file_filter + ")> "
             )
-            input_vhost_config_path = raw_input(
+            input_vhost_config_path = input(
                 "Vhosts file path (" + self.vhost_config_path + ")> "
             )
-            input_vhost_enabled_path = raw_input(
+            input_vhost_enabled_path = input(
                 "Vhosts enabled path (" + self.vhost_enabled_path + ")> "
             )
-            input_vhost_enabling_command = raw_input(
+            input_vhost_enabling_command = input(
                 "Vhosts enabling command (" + self.vhost_enabling_command + ")> "
             )
-            input_vhost_disabling_command = raw_input(
+            input_vhost_disabling_command = input(
                 "Vhosts disabling command (" + self.vhost_disabling_command + ")> "
             )
-            input_apache_reload_command = raw_input(
+            input_apache_reload_command = input(
                 "Apache reload command (" + self.apache_reload_command + ")> "
             )
-            input_certbot_path = raw_input("Certbot path (" + self.certbot_path + ")> ")
-            input_certbot_mail = raw_input("Certbot mail (" + self.certbot_mail + ")> ")
+            input_certbot_path = input("Certbot path (" + self.certbot_path + ")> ")
+            input_certbot_mail = input("Certbot mail (" + self.certbot_mail + ")> ")
             save_config = query_yes_no("Do you want to save configuration?")
             if save_config:
                 self.config.add_section(config_id)
