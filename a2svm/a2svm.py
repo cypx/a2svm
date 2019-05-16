@@ -81,27 +81,27 @@ class a2svm(object):
     def load(self, config_id):
         if self.config.has_section(config_id):
             try:
-                self.macro_path = self.config.get(config_id, "macro_path", 0)
+                self.macro_path = self.config.get(config_id, "macro_path")
                 self.macro_file_filter = self.config.get(
-                    config_id, "macro_file_filter", 0
+                    config_id, "macro_file_filter"
                 )
                 self.vhost_config_path = self.config.get(
-                    config_id, "vhost_config_path", 0
+                    config_id, "vhost_config_path"
                 )
                 self.vhost_enabled_path = self.config.get(
-                    config_id, "vhost_enabled_path", 0
+                    config_id, "vhost_enabled_path"
                 )
                 self.vhost_enabling_command = self.config.get(
-                    config_id, "vhost_enabling_command", 0
+                    config_id, "vhost_enabling_command"
                 )
                 self.vhost_disabling_command = self.config.get(
-                    config_id, "vhost_disabling_command", 0
+                    config_id, "vhost_disabling_command"
                 )
                 self.apache_reload_command = self.config.get(
-                    config_id, "apache_reload_command", 0
+                    config_id, "apache_reload_command"
                 )
-                self.certbot_path = self.config.get(config_id, "certbot_path", 0)
-                self.certbot_mail = self.config.get(config_id, "certbot_mail", 0)
+                self.certbot_path = self.config.get(config_id, "certbot_path")
+                self.certbot_mail = self.config.get(config_id, "certbot_mail")
             except configparser.NoOptionError:
                 print("Invalid or outdated config")
                 remove_config = query_yes_no("Do you want to remove invalid config")
