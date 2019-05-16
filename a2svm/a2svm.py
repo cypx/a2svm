@@ -4,7 +4,7 @@
 from __future__ import print_function
 from a2svm import ressources
 import sys
-import ConfigParser
+import configparser
 import string
 import random
 import datetime
@@ -61,7 +61,7 @@ class a2svm(object):
         self.apache_reload_command = "/etc/init.d/apache2 reload"
         self.certbot_path = "/usr/bin/certbot"
         self.certbot_mail = "root@host.local"
-        self.config = ConfigParser.ConfigParser()
+        self.config = configparser.ConfigParser()
         self.config_file = os.path.join(
             user_data_dir(self.appname, self.appauthor), "a2svm.cfg"
         )
@@ -102,7 +102,7 @@ class a2svm(object):
                 )
                 self.certbot_path = self.config.get(config_id, "certbot_path", 0)
                 self.certbot_mail = self.config.get(config_id, "certbot_mail", 0)
-            except ConfigParser.NoOptionError:
+            except configparser.NoOptionError:
                 print("Invalid or outdated config")
                 remove_config = query_yes_no("Do you want to remove invalid config")
                 if remove_config:
