@@ -14,7 +14,12 @@ setup(
     description=__description__,
     long_description=open("README.rst").read(),
     include_package_data=True,
-    install_requires=["appdirs", "argparse"],
+    install_requires=[
+        "appdirs",
+        'configparser;python_version<"3"',
+        'future;python_version<"3"',
+        "argparse",
+    ],
     url="https://github.com/cypx/a2svm",
     classifiers=[
         "Programming Language :: Python",

@@ -2,12 +2,14 @@
 # -*- coding: utf-8 -*-
 
 from __future__ import print_function
+from __future__ import absolute_import
+from builtins import input
 from a2svm import ressources
 import sys
 import configparser
 import string
 import random
-import datetime
+import time
 import subprocess
 import re
 from appdirs import *
@@ -71,7 +73,7 @@ class a2svm(object):
         remove_config = query_yes_no("Are you sure you want to remove config?")
         if remove_config:
             self.config.remove_section(config_id)
-            with open(self.config_file, "wb") as configfile:
+            with open(self.config_file, "w") as configfile:
                 self.config.write(configfile)
                 print(
                     "\nConfiguration file has been update: "
@@ -82,12 +84,8 @@ class a2svm(object):
         if self.config.has_section(config_id):
             try:
                 self.macro_path = self.config.get(config_id, "macro_path")
-                self.macro_file_filter = self.config.get(
-                    config_id, "macro_file_filter"
-                )
-                self.vhost_config_path = self.config.get(
-                    config_id, "vhost_config_path"
-                )
+                self.macro_file_filter = self.config.get(config_id, "macro_file_filter")
+                self.vhost_config_path = self.config.get(config_id, "vhost_config_path")
                 self.vhost_enabled_path = self.config.get(
                     config_id, "vhost_enabled_path"
                 )
@@ -114,9 +112,7 @@ class a2svm(object):
                     50, "+"
                 )
             )
-            input_macro_path = input(
-                "Macro folder path (" + self.macro_path + ")> "
-            )
+            input_macro_path = input("Macro folder path (" + self.macro_path + ")> ")
             input_macro_file_filter = input(
                 "Macro file filter (" + self.macro_file_filter + ")> "
             )
@@ -209,7 +205,7 @@ class a2svm(object):
                     self.config.set(config_id, "certbot_mail", self.certbot_mail)
                 if not os.path.exists(os.path.dirname(self.config_file)):
                     os.makedirs(os.path.dirname(self.config_file))
-                with open(self.config_file, "wb") as configfile:
+                with open(self.config_file, "w") as configfile:
                     self.config.write(configfile)
                     print(
                         "\nConfiguration file has been saved to: "
@@ -331,7 +327,7 @@ class a2svm(object):
         )
         if not os.path.exists(os.path.dirname(vhost_file)):
             os.makedirs(os.path.dirname(vhost_file))
-        with open(vhost_file, "wb") as dest_file:
+        with open(vhost_file, "w") as dest_file:
             dest_file.write(vhost_content)
         self.run_command(self.vhost_enabling_command, vhost.name, "Vhost enabled")
         self.run_command(self.apache_reload_command, " ", "Apache reloaded")
