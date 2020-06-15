@@ -126,6 +126,7 @@ From sources
 
     $ git clone https://github.com/cypx/a2svm
     $ cd a2svm
+	$ pip install -r requirements.txt
     $ python setup.py install
 
 Reminder
