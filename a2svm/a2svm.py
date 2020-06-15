@@ -239,6 +239,17 @@ class a2svm(object):
             )
         print("-" * 119)
 
+    def fqdn(self):
+        filelist = os.listdir(self.vhost_config_path)
+        vhost_list = []
+        for file in filelist:
+            vhost = self.get_vhost_parameter(file)
+            if vhost:
+                vhost_list.append(vhost)
+        vhost_list.sort(key=lambda x: x.name)
+        for vhost in vhost_list:
+            print( vhost.servername + " " + vhost.alias.strip('"') )
+
     def get_vhost_parameter(self, file_name):
         expr = re.compile(
             '(^\s*use) ([.\-\_a-zA-Z0-9_]+) ([.\-\_a-zA-Z0-9_]+) ([.\/\-\_a-zA-Z0-9_]+) ([.\/\-\_a-zA-Z0-9_]+) ([.\/\-\_\ "a-zA-Z0-9_]+)'
@@ -482,6 +493,20 @@ def launcher():
         help="Show only vhost name matching pattern",
     )
 
+    parser_fqdn = subparsers.add_parser(
+        "fqdn",
+        description="Show all used fqdn",
+        help="Show all used fqdn",
+    )
+    parser_fqdn.add_argument(
+        "fqdn_name_pattern",
+        metavar="<search_pattern>",
+        type=str,
+        nargs="?",
+        default="%",
+        help="Show only fqdn name matching pattern",
+    )
+
     parser_rm = subparsers.add_parser(
         "rm", description="Delete a vhost", help="Delete a vhost"
     )
@@ -530,6 +555,10 @@ def launcher():
 
     if hasattr(args, "ls_vhost_pattern"):
         session.list()
+        sys.exit(1)
+
+    if hasattr(args, "fqdn_name_pattern"):
+        session.fqdn()
         sys.exit(1)
 
     if hasattr(args, "rm_vhost_name"):
