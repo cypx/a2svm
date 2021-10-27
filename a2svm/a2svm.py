@@ -424,7 +424,7 @@ class a2svm(object):
             if fqdn not in ['"', " "]:
                 extra_alias += " -d " + fqdn.strip('"')
         self.run_command(
-            self.certbot_path
+            self.certbot_path,
             self.certbot_options
             + " --email "
             + self.certbot_mail
