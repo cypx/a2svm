@@ -63,6 +63,7 @@ class a2svm(object):
         self.apache_reload_command = "/etc/init.d/apache2 reload"
         self.certbot_path = "/usr/bin/certbot"
         self.certbot_mail = "root@host.local"
+        self.certbot_options = "certonly --noninteractive --agree-tos --email "
         self.config = configparser.ConfigParser()
         self.config_file = os.path.join(
             user_data_dir(self.appname, self.appauthor), "a2svm.cfg"
@@ -100,6 +101,7 @@ class a2svm(object):
                 )
                 self.certbot_path = self.config.get(config_id, "certbot_path")
                 self.certbot_mail = self.config.get(config_id, "certbot_mail")
+                self.certbot_options = self.config.get(config_id, "certbot_options")
             except configparser.NoOptionError:
                 print("Invalid or outdated config")
                 remove_config = query_yes_no("Do you want to remove invalid config")
@@ -133,6 +135,7 @@ class a2svm(object):
             )
             input_certbot_path = input("Certbot path (" + self.certbot_path + ")> ")
             input_certbot_mail = input("Certbot mail (" + self.certbot_mail + ")> ")
+            input_certbot_options = input("Certbot options (" + self.certbot_options + ")> ")
             save_config = query_yes_no("Do you want to save configuration?")
             if save_config:
                 self.config.add_section(config_id)
@@ -203,6 +206,10 @@ class a2svm(object):
                     self.config.set(config_id, "certbot_mail", input_certbot_mail)
                 else:
                     self.config.set(config_id, "certbot_mail", self.certbot_mail)
+                if input_certbot_options:
+                    self.config.set(config_id, "certbot_options", input_certbot_options)
+                else:
+                    self.config.set(config_id, "certbot_options", self.certbot_options)
                 if not os.path.exists(os.path.dirname(self.config_file)):
                     os.makedirs(os.path.dirname(self.config_file))
                 with open(self.config_file, "w") as configfile:
@@ -418,7 +425,7 @@ class a2svm(object):
                 extra_alias += " -d " + fqdn.strip('"')
         self.run_command(
             self.certbot_path,
-            "certonly --noninteractive --agree-tos --email "
+            + self.certbot_options
             + self.certbot_mail
             + " --webroot --expand -w /var/www/vhosts/"
             + vhost.directory

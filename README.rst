@@ -137,6 +137,6 @@ To publish package on pypi
 .. code-block:: bash
 
     $ pip install twine
-		$ rm -rf dist
-		$ python setup.py sdist bdist_wheel
+    $ rm -rf dist
+    $ python setup.py sdist bdist_wheel
     $ twine upload dist/*
