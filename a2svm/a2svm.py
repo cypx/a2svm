@@ -63,7 +63,7 @@ class a2svm(object):
         self.apache_reload_command = "/etc/init.d/apache2 reload"
         self.certbot_path = "/usr/bin/certbot"
         self.certbot_mail = "root@host.local"
-        self.certbot_options = "certonly --noninteractive --agree-tos --email "
+        self.certbot_options = "certonly --noninteractive --agree-tos"
         self.config = configparser.ConfigParser()
         self.config_file = os.path.join(
             user_data_dir(self.appname, self.appauthor), "a2svm.cfg"
@@ -424,9 +424,12 @@ class a2svm(object):
             if fqdn not in ['"', " "]:
                 extra_alias += " -d " + fqdn.strip('"')
         self.run_command(
-            self.certbot_path,
-            + self.certbot_options
+            self.certbot_path
+            self.certbot_options
+            + " --email "
             + self.certbot_mail
+            + "  --cert-name "
+            + vhost.servername
             + " --webroot --expand -w /var/www/vhosts/"
             + vhost.directory
             + "/html/ -d "

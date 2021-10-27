@@ -6,6 +6,12 @@ a2svm
 Changelog
 #############
 
+0.1.4 (20211027)
+*******************
+
+* fix certificate generation
+* prevent certbot to used suffixed folder name
+
 0.1.3 (20211027)
 *******************
 
